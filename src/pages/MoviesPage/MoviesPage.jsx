@@ -11,18 +11,11 @@ export default function MoviesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [value, setValue] = useState("");
   const query = searchParams.get("query") ?? "";
 
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    if (value === "") {
-      toast.error("Please enter text to search movies!");
-      return;
-    }
+  const onSubmit = (value) => {
     setSearchParams({ query: value });
-    setValue(""); 
   };
 
   useEffect(() => {
@@ -50,9 +43,7 @@ export default function MoviesPage() {
     getData();
   }, [query]);
 
-  const movieFilter = (e) => {
-    setValue(e.target.value);
-  };
+ 
 
   const filteredMovies = movies.filter((movie) =>
     movie.title.toLowerCase().includes(query.toLowerCase())
@@ -63,8 +54,6 @@ export default function MoviesPage() {
       <Toaster />
       <SearchForm
         onSubmit={onSubmit}
-        value={value}
-        movieFilter={movieFilter}
       />
       {isLoading && <b>Loading search movies...</b>}
       {error && <b>HTTP error!🤔</b>}
